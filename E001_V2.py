@@ -11,6 +11,8 @@ class Category:
         self.display_name = self.cat_name
         self.displayy_name()
 
+    def __repr__(self) -> str:
+        return 'category:{}'.format(self.cat_name)
     def dis(self):
         print('category: ', self.cat_name , 'code: ',self.code)
         print(self.display_name)
@@ -80,8 +82,8 @@ productlist = [Product("masala chips", wefer, 20),
         Product("home theater",electronics, 120000)]
 
 print('list of category')
-# cat_list.sort(key=lambda x:x.cat_name)
-
+cat_list.sort(key=lambda x:x.cat_name.lower())
+print(cat_list)
 for x in cat_list:
     x.dis()
 print('----------------------------------------------------------------')
