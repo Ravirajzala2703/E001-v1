@@ -18,19 +18,23 @@ class Movement:
         self.to_location=to_location
         self.product=product
         self.quantity=quantity
-        self.display=''
+        # self.display=''
+        
         try:
-            if self.product.stock_at_location[self.from_location] >= self.quantity:  # 40 >=20
-                qun = self.product.stock_at_location[self.from_location] - self.quantity  # 40-20=20
-                self.product.stock_at_location.update({self.from_location: qun})  # {morbi,20}
-                if self.to_location in self.product.stock_at_location:  # {bhavnagar}it check location is available or not
-                    qun1 = self.product.stock_at_location[self.to_location] + self.quantity  # 10+20
-                    self.product.stock_at_location.update({self.to_location: qun1})  # {bhavnagar,30}
+            print('\nproduct_name:',product.name,'\nFrom_location: >>',self.from_location.name,'To_location: >>',self.to_location.name,'quantity: >>',self.quantity)
+            if self.from_location in self.product.stock_at_location:
+                
+                if self.product.stock_at_location[self.from_location] >= self.quantity:  # 40 >=20
+                    qun = self.product.stock_at_location[self.from_location] - self.quantity  # 40-20=20
+                    self.product.stock_at_location.update({self.from_location: qun})  # {jamnagar,20}
+                    if self.to_location in self.product.stock_at_location:  # {bhavnagar}it check location is available or not
+                        qun1 = self.product.stock_at_location[self.to_location] + self.quantity  # 10+20
+                        self.product.stock_at_location.update({self.to_location: qun1})  # {bhavnagar,30}
                 else:
-                    # if not available location it add both location and quantity
+                #     # if not available location it add both location and quantity
                     self.product.stock_at_location.update({self.to_location: self.quantity})
                 print(self.product.name,"done movement")
-                self.display = f'product quantity :{self.quantity} from {self.from_location.name} to {self.to_location.name}'
+                # self.display = f'product quantity :{self.quantity} from {self.from_location.name} to {self.to_location.name}'
 
             else:
                 print(f"quantity no: {self.quantity} of {self.product.name} not available {self.from_location.name}")
@@ -39,72 +43,62 @@ class Movement:
 
     @staticmethod
     def movements_by_product(product):
-        n = 0
+        move = []
         for item in listofm:
             if item.product.name == product.name:
-                n = 1
-                print(item.display)
+                move.append(item)
+    
+        return move
 
-        if n == 0:
-            print("No movements yet.....")
+rajkot = Location("Rajkot")
+jamnagar = Location("Jamnagar")
+bhavnagar = Location("Bhavnagar")
+mumbai = Location("Mumbai")
+location_list = [rajkot, jamnagar, bhavnagar, mumbai]
+for i in location_list:
+    i.dis_play()
 
-if __name__ == "__main__":
-    rajkot = Location("RAJKOT")
-    morbi = Location("Morbi")
-    bhavngar = Location("Bhavnagar")
-    vadodara = Location("Vadodara")
-    location_list = [rajkot, morbi, bhavngar, vadodara]
-    for i in location_list:
-        i.dis_play()
+vehicale = Category("vehicale")
 
-    vehicale = Category("vehicale")
+car = Product('car',vehicale,1450000,{rajkot:30, jamnagar:40, mumbai:25})
+scooter = Product('scooter',vehicale,75000,{rajkot:30,jamnagar:10,bhavnagar:10})
+bike = Product('bike',vehicale,88500,{jamnagar:40,bhavnagar:40,mumbai:10})
+e_bike = Product('E_bike',vehicale,120000,{rajkot:30,bhavnagar:90,mumbai:10})
+bicycle = Product('bicycle',vehicale,7000,{rajkot:2,jamnagar:95,bhavnagar:10,mumbai:100})
 
-    car = Product('car',vehicale,1450000,{rajkot:30, morbi:40, vadodara:10})
-    scooter = Product('scooter',vehicale,75000,{rajkot:10,morbi:10,bhavngar:10})
-    bike = Product('bike',vehicale,88500,{morbi:40,bhavngar:40,vadodara:10})
-    e_bike = Product('E_bike',vehicale,120000,{rajkot:30,bhavngar:90,vadodara:10})
-    bicycle = Product('bicycle',vehicale,7000,{rajkot:2,morbi:100,bhavngar:10,vadodara:100})
+listofprodcut = [car, scooter, bike, e_bike, bicycle]
 
-    listofprodcut = [car, scooter, bike, e_bike, bicycle]
-
-    for i in listofprodcut:
-        print(i.name)  # print name of product
-        for key in i.stock_at_location:  # print dictionary of location name,quantity value
-            print(f'{key.name} - {i.stock_at_location[key]}')
-        print()
-
-    movement1 = Movement(morbi, bhavngar, bicycle, 50)
-    movement2 = Movement(rajkot, bhavngar, car, 20)
-    movement3 = Movement(rajkot, morbi, e_bike, 20)
-    movement4 = Movement(morbi,bhavngar, bike, 10)
-    movement5=Movement(morbi,rajkot,e_bike,30)
-
-    listofm = [movement1, movement2, movement3, movement4,movement5]
+for i in listofprodcut:
+    print(i.name)  # print name of product
+    for key in i.stock_at_location:  # print dictionary of location name,quantity value
+        print(f'{key.name} - {i.stock_at_location[key]}')
     print()
 
-    for i in listofprodcut:
-        print(i.name)  # product name
-        Movement.movements_by_product(i)  # movement of product
-        print()
-    print("\n")
-    print("---------------------------------------------------------------------")
-    print("new stock at location")
-    for i in listofprodcut:
-        i.display()
-        print('Location: ',end='')
-        for key in i.stock_at_location:
-            print(f'{key.name} - {i.stock_at_location[key]}', end='  ')
-        print('\n')
-    print("product list by location")
-    for i in location_list:
-        print(i.name)
-        for p in listofprodcut:
-            if i in p.stock_at_location:
-                print(f'{p.name} - {p.stock_at_location[i]}')
-        print()
+movement1 = Movement(jamnagar, bhavnagar, bicycle, 50)
+movement2 = Movement(rajkot, bhavnagar, car, 20)
+movement3 = Movement(rajkot, jamnagar, scooter, 20)
+movement4 = Movement(jamnagar,bhavnagar, bike, 10)
+movement5=Movement(jamnagar,rajkot,e_bike,30)
 
+listofm = [movement1, movement2, movement3, movement4,movement5]
+print()
 
+for product in listofprodcut:
+    product_move_list = Movement.movements_by_product(product)
 
-
-
-
+print("\n")
+print("---------------------------------------------------------------------")
+print("new stock at location")
+for i in listofprodcut:
+    i.display()
+    print('Location: ',end='')
+    for key in i.stock_at_location:
+        print(f'{key.name} - {i.stock_at_location[key]}', end='  ')
+    print('\n')
+print("product list by location")
+for i in location_list:
+    print(i.name)
+    for p in listofprodcut:
+        if i in p.stock_at_location:
+            print(f'{p.name} - {p.stock_at_location[i]}')
+    print()

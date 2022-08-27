@@ -33,7 +33,7 @@ class Category:
 class Product:
     product_code = 0
 
-    def __init__(self,name,category,price,stock_at_location={}) -> None:
+    def __init__(self,name,category,price,stock_at_location={}) :
         self.name = name
         self.code = Product.product_code+1
         Product.product_code += 1
@@ -82,8 +82,11 @@ productlist = [Product("masala chips", wefer, 20),
         Product("home theater",electronics, 120000)]
 
 print('list of category')
-cat_list.sort(key=lambda x:x.cat_name.lower())
-print(cat_list)
+# for i in range(0,len(cat_list)-1):
+#     for j in range(len(cat_list)-1):
+#         if(cat_list[j].cat_name.lower() > cat_list[j+1].cat_name.lower()):
+#             cat_list[j],cat_list[j+1] = cat_list[j+1],cat_list[j]
+# print(cat_list)
 for x in cat_list:
     x.dis()
 print('----------------------------------------------------------------')
